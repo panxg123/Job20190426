@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxg.dao.AccountDao">
+	<select id="findAccount" parameterType="AccountModel" resultType="AccountModel">
+		select * from account
+		<trim prefix="where" prefixOverrides="and">
+			<if test="ID!=null">and ID=#{ID}</if>
+			<if test="NAME!=null">and NAME=#{NAME}</if>
+			<if test="PASSWORD!=null">and PASSWORD=#{PASSWORD}</if>
+			<if test="GENDER!=null">and GENDER=#{GENDER}</if>
+			<if test="IDNUMBER!=null">and IDNUMBER=#{IDNUMBER}</if>
+			<if test="OPENINGAMOUNT!=null">and OPENINGAMOUNT=#{OPENINGAMOUNT}</if>
+			<if test="OPENINGTIME!=null">and OPENINGTIME=#{OPENINGTIME}</if>
+			<if test="BLANCE!=null">and BLANCE=#{BLANCE}</if>
+		</trim>
+	</select>
+	<update id="updateAccount" parameterType="AccountModel">
+		update account 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="NAME!=null"> NAME=#{NAME},</if>
+			<if test="PASSWORD!=null"> PASSWORD=#{PASSWORD},</if>
+			<if test="GENDER!=null"> GENDER=#{GENDER},</if>
+			<if test="IDNUMBER!=null"> IDNUMBER=#{IDNUMBER},</if>
+			<if test="OPENINGAMOUNT!=null"> OPENINGAMOUNT=#{OPENINGAMOUNT},</if>
+			<if test="OPENINGTIME!=null"> OPENINGTIME=#{OPENINGTIME},</if>
+			<if test="BLANCE!=null"> BLANCE=#{BLANCE},</if>
+		</trim>
+		where id=#{ID}
+	</update>
+	<delete id="deleteAccount" parameterType="AccountModel">
+		delete from account
+		<trim prefix="where" prefixOverrides="and||or">
+			<if test="ID!=null">and ID=#{ID}</if>
+			<if test="NAME!=null">and NAME=#{NAME}</if>
+			<if test="PASSWORD!=null">and PASSWORD=#{PASSWORD}</if>
+			<if test="GENDER!=null">and GENDER=#{GENDER}</if>
+			<if test="IDNUMBER!=null">and IDNUMBER=#{IDNUMBER}</if>
+			<if test="OPENINGAMOUNT!=null">and OPENINGAMOUNT=#{OPENINGAMOUNT}</if>
+			<if test="OPENINGTIME!=null">and OPENINGTIME=#{OPENINGTIME}</if>
+			<if test="BLANCE!=null">and BLANCE=#{BLANCE}</if>
+		</trim>
+	</delete>
+	<insert id="insertAccount" parameterType="AccountModel">
+		<selectKey resultType="java.lang.Integer" keyProperty="ID"
+			order="BEFORE">
+			select add_account_id.nextval from dual
+		</selectKey>
+		insert into account
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ID!=null">ID,</if>
+			<if test="NAME!=null">NAME,</if>
+			<if test="PASSWORD!=null">PASSWORD,</if>
+			<if test="GENDER!=null">GENDER,</if>
+			<if test="IDNUMBER!=null">IDNUMBER,</if>
+			<if test="OPENINGAMOUNT!=null">OPENINGAMOUNT,</if>
+			<if test="OPENINGTIME==OPENINGTIME">OPENINGTIME,</if>
+			<if test="BLANCE==BLANCE">BLANCE,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ID!=null">#{ID},</if>
+			<if test="NAME!=null">#{NAME},</if>
+			<if test="PASSWORD!=null">#{PASSWORD},</if>
+			<if test="GENDER!=null">#{GENDER},</if>
+			<if test="IDNUMBER!=null">#{GENDER},</if>
+			<if test="OPENINGAMOUNT!=null">#{OPENINGAMOUNT},</if>
+			<if test="OPENINGTIME==OPENINGTIME">sysdate,</if>
+			<if test="BLANCE==BLANCE">0,</if>
+		</trim>
+	</insert>
+	<!-- 取款 -->
+	<update id="updateWithdrawal" parameterType="java.util.Map">
+		update account set blance=blance-#{money} where id=#{id}
+	</update>
+</mapper>

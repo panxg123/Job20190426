@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxg.dao.TransactionDao">
+	<insert id="insertTransaction" parameterType="TransactionModel">
+		<selectKey resultType="java.lang.Integer" keyProperty="ID" order="BEFORE">
+			select add_transaction_id.nextval from dual
+		</selectKey>
+		insert into transaction
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ID!=null">ID,</if>
+			<if test="ACCOUNTID!=null">ACCOUNTID,</if>
+			<if test="TYPE!=null">TYPE,</if>
+			<if test="TIME==TIME">TIME,</if>
+			<if test="AMOUNT!=null">AMOUNT,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ID!=null">#{ID},</if>
+			<if test="ACCOUNTID!=null">#{ACCOUNTID},</if>
+			<if test="TYPE!=null">#{TYPE},</if>
+			<if test="TIME==TIME">sysdate,</if>
+			<if test="AMOUNT!=null">#{AMOUNT},</if>
+		</trim>
+	</insert>
+	<select id="findTransaction" parameterType="TransactionModel" resultType="TransactionModel">
+		select * from Transaction
+		<trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+			<if test="ID!=null">and ID=#{ID},</if>
+			<if test="ACCOUNTID!=null">and ACCOUNTID=#{ACCOUNTID},</if>
+			<if test="TYPE!=null">and TYPE=#{TYPE},</if>
+			<if test="TIME!=null">and TIME=#{TIME},</if>
+			<if test="AMOUNT!=null">and AMOUNT=#{AMOUNT},</if>
+		</trim>
+	</select>
+	<select id="findByTypeMoney" parameterType="hashmap" resultType="java.lang.Double">
+	select sum(amount) from Transaction where
+	<choose>
+		<when test="statu==1">
+			(type='转入' or type='存入') and accountid=#{id}
+		</when>
+		<otherwise>
+			(type='转出' or type='取出') and accountid=#{id}
+		</otherwise>
+	</choose>
+</select>
+</mapper>

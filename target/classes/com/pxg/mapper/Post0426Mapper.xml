@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxg.dao.Post0426Dao">
+	<insert id="insertPost" parameterType="Post0426Model">
+		<selectKey resultType="java.lang.Integer" keyProperty="ID"
+			order="BEFORE">
+			select add_account_id.nextval from dual
+		</selectKey>
+		insert into post0426 values(#{ID},#{USERID},SYSDATE,#{CONTENTID})
+	</insert>
+</mapper>
